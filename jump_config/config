@@ -1,0 +1,21 @@
+Host bastion
+    HostName 192.168.18.6
+    Port 2222
+    User acumen
+    IdentityFile ~/.ssh/id_acumen
+
+Host node1
+    HostName 10.0.10.11
+    User acumen
+    IdentityFile ~/.ssh/id_acumen
+    ProxyJump bastion
+Host node2
+    HostName 10.0.10.12
+    User acumen
+    IdentityFile ~/.ssh/id_acumen
+    ProxyJump bastion
+Host node3
+    HostName 10.0.10.13
+    User acumen
+    IdentityFile ~/.ssh/id_acumen
+    ProxyJump bastion

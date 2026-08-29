@@ -1,0 +1,60 @@
+networks:
+  public_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24
+  private_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.10.0/24
+
+x-ssh-common: &ssh-common
+  restart: unless-stopped
+  cap_add:
+    - NET_ADMIN
+
+services:
+  acumen-bastion:
+    <<: *ssh-common
+    build:
+      context: ./bastion
+    ports:
+      - "2222:22"
+    volumes:
+      - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
+    networks:
+      public_net:
+      private_net:
+        ipv4_address: 10.0.10.10
+
+  acumen-node-1:
+    <<: *ssh-common
+    build:
+      context: ./node
+    volumes:
+      - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
+    networks:
+      private_net:
+        ipv4_address: 10.0.10.11
+
+  acumen-node-2:
+    <<: *ssh-common
+    build:
+      context: ./node
+    volumes:
+      - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
+    networks:
+      private_net:
+        ipv4_address: 10.0.10.12
+
+  acumen-node-3:
+    <<: *ssh-common
+    build:
+      context: ./node
+    volumes:
+      - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
+    networks:
+      private_net:
+        ipv4_address: 10.0.10.13
