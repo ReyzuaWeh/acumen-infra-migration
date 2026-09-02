@@ -1,11 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
-chown -R acumen:acumen /home/acumen/.ssh
+chown acumen:acumen /home/acumen/.ssh
 chmod 700 /home/acumen/.ssh
-chmod 600 /home/acumen/.ssh/authorized_keys 2>/dev/null || true
 
 mkdir -p /var/log/consul /var/log/nomad
+
+sed -i "s/NODE_NAME_PLACEHOLDER/${NODE_NAME}/" /etc/consul.d/consul.hcl
+sed -i "s/NODE_IP_PLACEHOLDER/${NODE_IP}/g" /etc/nomad.d/nomad.hcl
+
+echo "nameserver 127.0.0.1" > /etc/resolv.conf
 
 consul agent -config-dir=/etc/consul.d > /var/log/consul/consul.log 2>&1 &
 sleep 3

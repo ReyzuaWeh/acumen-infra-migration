@@ -33,8 +33,15 @@ services:
     <<: *ssh-common
     build:
       context: ./node
+    environment:
+      - NODE_NAME=node-1
+      - NODE_IP=10.0.10.11
+    cgroup: host
+    privileged: true
     volumes:
       - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
+      - consul-data-1:/var/consul
+      - nomad-data-1:/var/nomad
     networks:
       private_net:
         ipv4_address: 10.0.10.11
@@ -43,8 +50,15 @@ services:
     <<: *ssh-common
     build:
       context: ./node
+    environment:
+      - NODE_NAME=node-2
+      - NODE_IP=10.0.10.12
+    cgroup: host
+    privileged: true
     volumes:
       - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
+      - consul-data-2:/var/consul
+      - nomad-data-2:/var/nomad
     networks:
       private_net:
         ipv4_address: 10.0.10.12
@@ -53,8 +67,23 @@ services:
     <<: *ssh-common
     build:
       context: ./node
+    environment:
+      - NODE_NAME=node-3
+      - NODE_IP=10.0.10.13
+    cgroup: host
+    privileged: true
     volumes:
       - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
+      - consul-data-3:/var/consul
+      - nomad-data-3:/var/nomad
     networks:
       private_net:
         ipv4_address: 10.0.10.13
+
+volumes:
+  consul-data-1:
+  consul-data-2:
+  consul-data-3:
+  nomad-data-1:
+  nomad-data-2:
+  nomad-data-3:

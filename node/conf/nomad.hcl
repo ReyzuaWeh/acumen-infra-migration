@@ -5,10 +5,20 @@ bind_addr  = "0.0.0.0"
 server {
   enabled          = true
   bootstrap_expect = 3
+
+  server_join {
+    retry_join = ["10.0.10.11", "10.0.10.12", "10.0.10.13"]
+  }
 }
 
 client {
   enabled = true
+}
+
+advertise {
+  http = "NODE_IP_PLACEHOLDER"
+  rpc  = "NODE_IP_PLACEHOLDER"
+  serf = "NODE_IP_PLACEHOLDER"
 }
 
 consul {

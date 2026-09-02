@@ -2,6 +2,7 @@ datacenter = "acumen-dc1"
 data_dir   = "/var/consul"
 bind_addr  = "0.0.0.0"
 client_addr = "0.0.0.0"
+node_name  = "NODE_NAME_PLACEHOLDER"
 
 server           = true
 bootstrap_expect = 3

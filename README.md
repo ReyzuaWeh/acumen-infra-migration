@@ -8,6 +8,7 @@ This project focuses on building the foundational "Acumen" environment: a Bastio
 | Date | Summary | Evidence |
 | --- | --- | --- |
 | 29 August 2026 | Focus on initialization and quick setup | [Docker Compose Services](./documentation/20260829/setup-init-configuration.png) |
+| 02 September 2026 | Focus on configure Nomad and Consul locally. Also, learn about the dnsmasq configuration | [Nomad and Consul Configuration](./documentation/20260902/nomad-consul-configuration.png) |
 
 # Configuration
 
