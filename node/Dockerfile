@@ -4,10 +4,24 @@ ARG SSH_USER=acumen
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    openssh-server sudo iproute2 iputils-ping dnsutils curl gnupg dnsmasq ca-certificates
+    openssh-server \
+    sudo \
+    iproute2 \
+    iputils-ping \
+    dnsutils \
+    curl \
+    gnupg \
+    dnsmasq \
+    ca-certificates \
+    containernetworking-plugins
 
-RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-RUN echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(. /etc/os-release && echo $VERSION_CODENAME) main" > /etc/apt/sources.list.d/hashicorp.list
+RUN mkdir -p /opt/cni/bin && cp -a /usr/lib/cni/. /opt/cni/bin/
+
+RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | \
+    gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+RUN echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(. /etc/os-release && echo $VERSION_CODENAME) main" \
+    > /etc/apt/sources.list.d/hashicorp.list
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends consul nomad && \
@@ -17,7 +31,8 @@ RUN mkdir -p /var/run/sshd && ssh-keygen -A
 
 RUN useradd -m -s /bin/bash ${SSH_USER} && \
     usermod -aG sudo ${SSH_USER} && \
-    mkdir -p /home/${SSH_USER}/.ssh && chmod 700 /home/${SSH_USER}/.ssh
+    mkdir -p /home/${SSH_USER}/.ssh && \
+    chmod 700 /home/${SSH_USER}/.ssh
 
 RUN sed -i 's/#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && \
     sed -i 's/#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config && \
@@ -27,7 +42,9 @@ COPY conf/consul.hcl /etc/consul.d/consul.hcl
 COPY conf/nomad.hcl /etc/nomad.d/nomad.hcl
 COPY conf/dnsmasq.conf /etc/dnsmasq.conf
 COPY conf/entrypoint.sh /entrypoint.sh
+
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 22
+
 CMD ["/entrypoint.sh"]

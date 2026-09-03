@@ -13,6 +13,9 @@ server {
 
 client {
   enabled = true
+  host_network "default" {
+    cidr = "0.0.0.0/0"
+  }
 }
 
 advertise {

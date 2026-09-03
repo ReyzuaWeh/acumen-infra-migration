@@ -6,6 +6,7 @@ networks:
         - subnet: 192.168.100.0/24
   private_net:
     driver: bridge
+    attachable: true
     ipam:
       config:
         - subnet: 10.0.10.0/24
@@ -26,6 +27,7 @@ services:
       - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
     networks:
       public_net:
+        ipv4_address: 192.168.100.2
       private_net:
         ipv4_address: 10.0.10.10
 
@@ -44,6 +46,7 @@ services:
       - nomad-data-1:/var/nomad
       - ./jobs:/jobs
       - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker/netns:/var/run/docker/netns
     networks:
       private_net:
         ipv4_address: 10.0.10.11
