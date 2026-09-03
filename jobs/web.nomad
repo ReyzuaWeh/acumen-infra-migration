@@ -4,27 +4,26 @@ job "web" {
   group "web" {
     network {
       port "http" {
-        static = 8080
-        to     = 80
+        static      = 8080
+        to          = 80
+        host_network = "default"
       }
     }
 
     service {
-      name     = "web"
-      port     = "http"
-      provider = "consul"
+      name         = "web"
+      port         = "http"
+      provider     = "consul"
+      address_mode = "host"
     }
 
     task "nginx" {
       driver = "docker"
 
       config {
-        image        = "nginx:alpine"
-        ports        = ["http"]
-        network_mode = "host"
+        image = "nginx:alpine"
+        ports = ["http"]
       }
-
-      shutdown_delay = "10s"
     }
   }
 }
