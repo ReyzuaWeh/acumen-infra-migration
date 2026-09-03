@@ -42,6 +42,8 @@ services:
       - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
       - consul-data-1:/var/consul
       - nomad-data-1:/var/nomad
+      - ./jobs:/jobs
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       private_net:
         ipv4_address: 10.0.10.11
@@ -59,6 +61,7 @@ services:
       - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
       - consul-data-2:/var/consul
       - nomad-data-2:/var/nomad
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       private_net:
         ipv4_address: 10.0.10.12
@@ -76,6 +79,7 @@ services:
       - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
       - consul-data-3:/var/consul
       - nomad-data-3:/var/nomad
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       private_net:
         ipv4_address: 10.0.10.13
