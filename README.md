@@ -9,6 +9,7 @@ This project focuses on building the foundational "Acumen" environment: a Bastio
 | --- | --- | --- |
 | 29 August 2026 | Focus on initialization and quick setup | [Docker Compose Services](./documentation/20260829/setup-init-configuration.png) |
 | 02 September 2026 | Focus on configure Nomad and Consul locally. Also, learn about the dnsmasq configuration | [Nomad and Consul Configuration](./documentation/20260902/nomad-consul-configuration.png) |
+| 03 September 2026 | Today's goal was to complete all the remaining step locally | |
 
 # Configuration
 
@@ -29,6 +30,12 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_acumen -C "acumen-lab" -N ""
 This creates:
 - `~/.ssh/id_acumen` — private key (keep secret)
 - `~/.ssh/id_acumen.pub` — public key (referenced by `docker-compose.yml`)
+
+Remember, if you can't access your host machine, you can remove old known hosts. Here is the command:
+
+```bash
+ssh-keygen -R <host-ip>
+``` 
 
 ## Starting The Project
 
@@ -86,3 +93,21 @@ On the second device, set correct permissions, then connect through the Bastion 
 chmod 600 ~/.ssh/config
 ssh <host-name>
 ```
+
+## Access Nomad and Consul in Each Nodes
+To do this, you can use 2 method to access.
+
+1. Forwarding port
+
+This method requires `ssh` to forward the port from the node to your local machine. For example, to access Nomad on node1:
+
+```bash
+ssh -i ~/.ssh/id_acumen -L 4646:<host-ip>:4646 acumen@<host-ip> -p 2222
+ssh -i ~/.ssh/id_acumen -L 8500:<host-ip>:8500 acumen@<host-ip> -p 2222
+```
+
+Then, you can access Nomad UI in your browser at `http://localhost:4646` and Consul UI at `http://localhost:8500`.
+
+2. Use its host IP address
+
+This method just the nodes original addresses. For example, if you want to access Nomad in node-1, you can use `http://10.0.10.11:4646` and Consul in node1, you can use `http://10.0.10.11:8500`.
