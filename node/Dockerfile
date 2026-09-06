@@ -13,9 +13,14 @@ RUN apt-get update && \
     gnupg \
     dnsmasq \
     ca-certificates \
-    containernetworking-plugins
+    containernetworking-plugins \
+    docker.io \
+    iptables && \
+    rsyslog && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /opt/cni/bin && cp -a /usr/lib/cni/. /opt/cni/bin/
+RUN mkdir -p /opt/cni/bin && \
+    cp -a /usr/lib/cni/. /opt/cni/bin/
 
 RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | \
     gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
@@ -27,10 +32,11 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends consul nomad && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /var/run/sshd && ssh-keygen -A
+RUN mkdir -p /var/run/sshd /var/log/consul /var/log/nomad && \
+    ssh-keygen -A
 
 RUN useradd -m -s /bin/bash ${SSH_USER} && \
-    usermod -aG sudo ${SSH_USER} && \
+    usermod -aG sudo,docker ${SSH_USER} && \
     mkdir -p /home/${SSH_USER}/.ssh && \
     chmod 700 /home/${SSH_USER}/.ssh
 

@@ -1,6 +1,7 @@
 datacenter = "acumen-dc1"
 data_dir   = "/var/consul"
-bind_addr  = "0.0.0.0"
+bind_addr = "NODE_IP_PLACEHOLDER"
+advertise_addr = "NODE_IP_PLACEHOLDER"
 client_addr = "0.0.0.0"
 node_name  = "NODE_NAME_PLACEHOLDER"
 

@@ -14,7 +14,7 @@ server {
 client {
   enabled = true
   host_network "default" {
-    cidr = "0.0.0.0/0"
+    cidr = "10.0.10.0/24"
   }
 }
 

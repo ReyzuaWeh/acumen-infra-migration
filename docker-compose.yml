@@ -4,9 +4,11 @@ networks:
     ipam:
       config:
         - subnet: 192.168.100.0/24
+
   private_net:
     driver: bridge
     attachable: true
+    internal: true
     ipam:
       config:
         - subnet: 10.0.10.0/24
@@ -36,8 +38,8 @@ services:
     build:
       context: ./node
     environment:
-      - NODE_NAME=node-1
-      - NODE_IP=10.0.10.11
+      NODE_NAME: node-1
+      NODE_IP: 10.0.10.11
     cgroup: host
     privileged: true
     volumes:
@@ -45,8 +47,6 @@ services:
       - consul-data-1:/var/consul
       - nomad-data-1:/var/nomad
       - ./jobs:/jobs
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/run/docker/netns:/var/run/docker/netns
     networks:
       private_net:
         ipv4_address: 10.0.10.11
@@ -56,15 +56,15 @@ services:
     build:
       context: ./node
     environment:
-      - NODE_NAME=node-2
-      - NODE_IP=10.0.10.12
+      NODE_NAME: node-2
+      NODE_IP: 10.0.10.12
     cgroup: host
     privileged: true
     volumes:
       - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
       - consul-data-2:/var/consul
       - nomad-data-2:/var/nomad
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./jobs:/jobs
     networks:
       private_net:
         ipv4_address: 10.0.10.12
@@ -74,15 +74,15 @@ services:
     build:
       context: ./node
     environment:
-      - NODE_NAME=node-3
-      - NODE_IP=10.0.10.13
+      NODE_NAME: node-3
+      NODE_IP: 10.0.10.13
     cgroup: host
     privileged: true
     volumes:
       - ~/.ssh/id_acumen.pub:/home/acumen/.ssh/authorized_keys:ro
       - consul-data-3:/var/consul
       - nomad-data-3:/var/nomad
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./jobs:/jobs
     networks:
       private_net:
         ipv4_address: 10.0.10.13

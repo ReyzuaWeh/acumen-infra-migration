@@ -4,17 +4,10 @@ job "web" {
   group "web" {
     network {
       port "http" {
-        static      = 8080
-        to          = 80
+        static       = 8080
+        to           = 80
         host_network = "default"
       }
-    }
-
-    service {
-      name         = "web"
-      port         = "http"
-      provider     = "consul"
-      address_mode = "host"
     }
 
     task "nginx" {
@@ -23,6 +16,12 @@ job "web" {
       config {
         image = "nginx:alpine"
         ports = ["http"]
+      }
+
+      service {
+        name     = "web"
+        port     = "http"
+        provider = "consul"
       }
     }
   }
