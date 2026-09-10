@@ -1,6 +1,9 @@
 FROM debian:bookworm-slim
 
 ARG SSH_USER=acumen
+ENV NODE_NAME=
+ENV NODE_IP=
+ENV GH_PAT=
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -15,8 +18,7 @@ RUN apt-get update && \
     ca-certificates \
     containernetworking-plugins \
     docker.io \
-    iptables && \
-    rsyslog && \
+    iptables rsyslog && \
     rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/cni/bin && \

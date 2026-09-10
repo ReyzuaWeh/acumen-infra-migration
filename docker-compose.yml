@@ -8,13 +8,11 @@ networks:
   private_net:
     driver: bridge
     attachable: true
-    internal: true
     ipam:
       config:
         - subnet: 10.0.10.0/24
 
 x-ssh-common: &ssh-common
-  restart: unless-stopped
   cap_add:
     - NET_ADMIN
 
@@ -38,6 +36,7 @@ services:
     build:
       context: ./node
     environment:
+      GH_PAT: $GH_PAT
       NODE_NAME: node-1
       NODE_IP: 10.0.10.11
     cgroup: host

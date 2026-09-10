@@ -15,7 +15,6 @@ sed -i "s/NODE_IP_PLACEHOLDER/${NODE_IP}/g" \
 sed -i "s/NODE_IP_PLACEHOLDER/${NODE_IP}/g" \
     /etc/nomad.d/nomad.hcl
 
-echo "nameserver 127.0.0.1" > /etc/resolv.conf
 
 echo "Starting Docker..."
 dockerd --storage-driver=vfs \
@@ -42,6 +41,7 @@ nomad agent \
 
 echo "Starting dnsmasq..."
 service dnsmasq start
+echo "nameserver 127.0.0.1" > /etc/resolv.conf
 
 echo "Starting SSH..."
 exec /usr/sbin/sshd -D -e

@@ -1,4 +1,4 @@
-variable "runner_token" {
+variable "gh_pat" {
   type = string
 }
 
@@ -8,24 +8,32 @@ job "github-runner" {
 
   group "runner" {
     count = 1
+
     restart {
-      attempts = 10
-      interval = "30m"
-      delay    = "15s"
-      mode     = "delay"
+      attempts = 0
+      mode     = "fail"
     }
+
+    reschedule {
+      unlimited      = true
+      delay          = "10s"
+      delay_function = "constant"
+    }
+
     task "runner" {
       driver = "docker"
+
       config {
         image = "myoung34/github-runner:latest"
       }
+
       env {
-        REPO_URL      = "https://github.com/ReyzuaWeh/acumen-infra-migration"
-        RUNNER_NAME   = "acumen-nomad-runner"
-        RUNNER_TOKEN  = "${var.runner_token}"
+        REPO_URL       = "https://github.com/ReyzuaWeh/acumen-infra-migration"
+        RUNNER_NAME    = "acumen-nomad-runner"
         RUNNER_WORKDIR = "/tmp/runner"
-        EPHEMERAL     = "false"
-        LABELS        = "acumen,nomad"
+        EPHEMERAL      = "false"
+        LABELS         = "acumen,nomad"
+        ACCESS_TOKEN   = var.gh_pat
       }
 
       resources {
