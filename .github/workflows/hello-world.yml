@@ -5,4 +5,8 @@ jobs:
   hello:
     runs-on: [self-hosted]
     steps:
-      - run: echo "Hello World from Acumen Nomad runner!"
+      - run: |
+          START=$(date +%s%3N)
+          echo "Hello World from Acumen Nomad runner!"
+          END=$(date +%s%3N)
+          echo "Latency: $((END-START)) ms"
